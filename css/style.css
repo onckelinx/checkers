@@ -1,0 +1,263 @@
+/* Checkers — flat design. Solid fills only: no gradients, no drop shadows. */
+
+:root {
+  --bg: #eef2f5;
+  --surface: #ffffff;
+  --text: #1d2b36;
+  --muted: #5f6f7c;
+  --header-bg: #1d3a52;
+  --header-text: #ffffff;
+  --accent: #1f6fb2;
+  --accent-hover: #185a91;
+  --accent-text: #ffffff;
+  --btn: #dde5ec;
+  --btn-hover: #cdd8e2;
+  --frame: #1d3a52;
+  --sq-light: #dfe7ee;
+  --sq-dark: #5b7c99;
+  --sq-last: #7e9db8;
+  --you: #e8573f;
+  --you-edge: #c2412b;
+  --cpu: #f7f5ef;
+  --cpu-edge: #c9c3b5;
+  --crown-you: #ffffff;
+  --crown-cpu: #1d2b36;
+  --must: #3aa76d;
+  --ok: #3aa76d;
+  --bad: #e8573f;
+  --focus: #f2b134;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1a24;
+    --surface: #172633;
+    --text: #e4ecf2;
+    --muted: #93a6b5;
+    --header-bg: #0a131b;
+    --header-text: #e4ecf2;
+    --accent: #3d8fd6;
+    --accent-hover: #5aa3e3;
+    --accent-text: #0a131b;
+    --btn: #24394b;
+    --btn-hover: #2e4a61;
+    --frame: #0a131b;
+    --sq-light: #3a4d5e;
+    --sq-dark: #1d3a52;
+    --sq-last: #2d5b80;
+    --you: #ff6b4f;
+    --you-edge: #c2412b;
+    --cpu: #e4ecf2;
+    --cpu-edge: #9aaab8;
+    --crown-you: #ffffff;
+    --crown-cpu: #172633;
+    --must: #4cc488;
+    --ok: #4cc488;
+    --bad: #ff6b4f;
+    --focus: #f2b134;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.4;
+}
+
+h1, h2 { margin: 0; font-weight: 600; }
+
+/* ---- Header ---- */
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 16px;
+  background: var(--header-bg);
+  color: var(--header-text);
+}
+
+.topbar h1 { font-size: 1.35rem; letter-spacing: 0.02em; }
+
+.controls { display: flex; align-items: center; gap: 0.5rem; }
+
+select {
+  font: inherit;
+  padding: 0.4rem 0.5rem;
+  border: 0;
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* ---- Buttons ---- */
+
+button {
+  font: inherit;
+  padding: 0.5rem 0.9rem;
+  border: 0;
+  border-radius: 4px;
+  background: var(--btn);
+  color: var(--text);
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) { background: var(--btn-hover); }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+button:focus-visible, select:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+button.primary { background: var(--accent); color: var(--accent-text); font-weight: 600; }
+button.primary:hover:not(:disabled) { background: var(--accent-hover); }
+
+/* ---- Layout ---- */
+
+main {
+  /* The board fits the window height as well as its width. */
+  --board: min(100%, 600px, calc(100vh - 15rem));
+  max-width: 632px;
+  margin: 0 auto;
+  padding: 1rem 16px 2rem;
+}
+
+.status {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  background: var(--surface);
+  font-size: 1.05rem;
+  min-height: 3rem;
+}
+
+.panel {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+  background: var(--surface);
+}
+
+/* ---- Result ---- */
+
+.result { border-left: 6px solid var(--accent); }
+.result.win { border-left-color: var(--ok); }
+.result.loss { border-left-color: var(--bad); }
+.result h2 { font-size: 1.3rem; margin-bottom: 0.25rem; }
+.result p { margin: 0 0 0.75rem; }
+
+/* ---- Board ---- */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: var(--board);
+  min-width: 256px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border: 8px solid var(--frame);
+  border-radius: 4px;
+  background: var(--frame);
+  user-select: none;
+}
+
+.sq {
+  position: relative;
+  min-width: 0;
+  padding: 0;
+  border-radius: 0;
+  background: var(--sq-light);
+}
+
+button.sq { background: var(--sq-dark); cursor: default; }
+button.sq:hover:not(:disabled) { background: var(--sq-dark); }
+button.sq.last, button.sq.last:hover:not(:disabled) { background: var(--sq-last); }
+button.sq:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+
+.board.your-turn button.sq.movable,
+.board.your-turn button.sq.target { cursor: pointer; }
+.board.thinking button.sq { cursor: wait; }
+
+/* Where the selected piece can go next. */
+.sq.target::after {
+  content: "";
+  position: absolute;
+  inset: 38%;
+  border-radius: 50%;
+  background: var(--focus);
+}
+
+/* Squares already chosen in a jump sequence that is not finished yet. */
+.sq.step::after {
+  content: "";
+  position: absolute;
+  inset: 30%;
+  border: 3px solid var(--focus);
+  border-radius: 50%;
+}
+
+/* ---- Pieces ---- */
+
+.piece {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 0.3rem solid;
+}
+
+.piece.none { display: none; }
+.piece.you { background: var(--you); border-color: var(--you-edge); }
+.piece.cpu { background: var(--cpu); border-color: var(--cpu-edge); }
+
+.sq.must .piece { outline: 3px solid var(--must); outline-offset: 2px; }
+.sq.selected .piece { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* A king carries a flat crown. */
+.piece.king::after {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 19h20v2H2zM2 17 3.5 6l5 5L12 3l3.5 8 5-5L22 17z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 19h20v2H2zM2 17 3.5 6l5 5L12 3l3.5 8 5-5L22 17z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.piece.you.king::after { background: var(--crown-you); }
+.piece.cpu.king::after { background: var(--crown-cpu); }
+
+/* ---- Piece counts ---- */
+
+.sides {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: var(--board);
+  min-width: 256px;
+  margin: 0.75rem auto 0;
+  font-size: 0.95rem;
+}
+
+.side {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 3px solid transparent;
+}
+
+.side.active { border-bottom-color: var(--accent); }
+
+.disc {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 3px solid;
+}
+
+.disc.you { background: var(--you); border-color: var(--you-edge); }
+.disc.cpu { background: var(--cpu); border-color: var(--cpu-edge); }

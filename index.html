@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkers</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Checkers</h1>
+    <div class="controls">
+      <label for="level">Difficulty</label>
+      <select id="level">
+        <option value="easy">Easy</option>
+        <option value="normal">Normal</option>
+        <option value="hard">Hard</option>
+      </select>
+      <button type="button" id="new-game">New game</button>
+    </div>
+  </header>
+
+  <main>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+
+    <section id="result" class="panel result" hidden>
+      <h2 id="result-title"></h2>
+      <p id="result-text"></p>
+      <button type="button" id="play-again" class="primary">Play again</button>
+    </section>
+
+    <div id="board" class="board"></div>
+
+    <div class="sides">
+      <div class="side" id="cpu-side"><span class="disc cpu"></span><span id="cpu-count"></span></div>
+      <div class="side" id="you-side"><span class="disc you"></span><span id="you-count"></span></div>
+    </div>
+  </main>
+
+  <script src="js/rules.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
